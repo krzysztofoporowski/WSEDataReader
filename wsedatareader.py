@@ -99,8 +99,8 @@ def get_bossa_date(mode='string'):
     --------
         bossa_date - date in the pandas datetime format
     '''
-    URL = "https://info.bossa.pl/index.jsp?layout=mstock&page=0&news_cat_id=707&pkind=metastock"
-    data = pd.read_html(URL)
+    url = "https://info.bossa.pl/index.jsp?layout=mstock&page=0&news_cat_id=707&pkind=metastock"
+    data = pd.read_html(url)
     # get first table only, "Wszystkie grupy GPW"
     table = data[0]
     full_string = table.iloc[3, 3].split(' ')
@@ -114,7 +114,7 @@ def get_bossa_date(mode='string'):
         if month < 10:
             str_month = '0' + str(month)
         else:
-            str_monht = str(month)
+            str_month = str(month)
         if day < 10:
             str_day = '0' + str(day)
         else:
