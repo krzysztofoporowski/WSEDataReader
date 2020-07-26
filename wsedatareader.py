@@ -12,7 +12,7 @@ from pathlib import Path
 import quandl
 import pandas as pd
 
-def create_directory(directory_name, mode=False):
+def create_directory(directory_name, verbose=False):
     '''
     Function to create directory for storing data
 
@@ -28,17 +28,17 @@ def create_directory(directory_name, mode=False):
     '''
     path_to_check = Path(directory_name)
     if path_to_check.exists():
-        if mode:
+        if verbose:
             print('Directory {} already exists'.format(directory_name))
         return True
     else:
-        if mode:
+        if verbose:
             print('Attempting to create path')
         try:
             path_to_check.mkdir()
             return True
         except FileExistsError:
-            if mode:
+            if verbose:
                 print('Strange, directory {} cannot be created'.format(
                     directory_name))
             return False
@@ -86,6 +86,43 @@ def get_data_from_quandle(equity_name, quandl_api_token):
             # print('Data from Quandl downloaded')
     return data
 
+def get_bossa_date(mode='string'):
+    '''
+    Checks what is the date of the file with stocks data listed in the text
+    format on bossa.pl (file mstall.zip)
+    Parameters:
+    ----------
+        mode - determines on how to return the value:
+               'string' - as a string used in files obtained from bossa.pl
+               'datetime' - as a pandas datetime value
+    Returns:
+    --------
+        bossa_date - date in the pandas datetime format
+    '''
+    URL = "https://info.bossa.pl/index.jsp?layout=mstock&page=0&news_cat_id=707&pkind=metastock"
+    data = pd.read_html(URL)
+    # get first table only, "Wszystkie grupy GPW"
+    table = data[0]
+    full_string = table.iloc[3, 3].split(' ')
+    string_data = full_string[0].split('.')
+    year = int(string_data[0])
+    month = int(string_data[1])
+    day = int(string_data[2])
+    if mode == 'datetime':
+        bossa_date = date(year, month, day)
+    elif mode == 'string':
+        if month < 10:
+            str_month = '0' + str(month)
+        else:
+            str_monht = str(month)
+        if day < 10:
+            str_day = '0' + str(day)
+        else:
+            str_day = str(day)
+        bossa_date = str(year) + '-' + str_month + '-' + str_day
+    else:
+        print('Do not understand mode value, use "string" or "datetime" only')
+    return bossa_date
 
 def get_data_from_bossa(stooq_name, path_to_data):
     '''
