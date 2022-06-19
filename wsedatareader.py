@@ -6,9 +6,14 @@ Created on  Jul 19 2020
 krzysztof.oporowski@gmail.com
 '''
 
+import os
 import pickle
-from datetime import date
+import datetime as dt
 from pathlib import Path
+import requests_cache
+import pandas_datareader.data as pdr
+from pandas_datareader.yahoo.headers import DEFAULT_HEADERS
+#from datetime import date
 import quandl
 import pandas as pd
 
@@ -61,7 +66,7 @@ def get_data_from_quandle(equity_name, quandl_api_token):
     --------
     Pandas DataFrame with one entitie's data
     '''
-    todays_date = str(date.today())
+    todays_date = str(dt.date.today())
     file_name = 'Data/' + equity_name + '-' + todays_date + '.pickle'
     try:
         with open(file_name, 'rb') as opened_file:
@@ -97,19 +102,27 @@ def get_bossa_date(mode='string'):
                'datetime' - as a pandas datetime value
     Returns:
     --------
-        bossa_date - date in the pandas datetime format
+        bossa_date - date in the pandas datetime or string format
     '''
-    URL = "https://info.bossa.pl/index.jsp?layout=mstock&page=0&news_cat_id=707&pkind=metastock"
-    data = pd.read_html(URL)
-    # get first table only, "Wszystkie grupy GPW"
-    table = data[0]
-    full_string = table.iloc[3, 3].split(' ')
-    string_data = full_string[0].split('.')
-    year = int(string_data[0])
-    month = int(string_data[1])
-    day = int(string_data[2])
+    path = Path()
+    home_path = path.home()
+    wig20_path = str(home_path) + os.path.sep + 'python' + os.path.sep + 'data' 
+    wig20_path = wig20_path + os.path.sep + 'WIG20.mst'
+    try:
+        wig20 = pd.read_csv(wig20_path, parse_dates=[1], usecols=[0, 1],
+                    names=['ticker', 'date'])
+    except:
+        text = 'No WIG20.mst file found on path: {}. Download the WIG20 file '
+        text = text + 'from the bossa.pl'
+        print(text.format(wig20_path))
+    last = wig20.tail(1)
+    last_date = pd.to_datetime(last.date)
+    year = int(last_date.dt.year)
+    print(year)
+    month = int(last_date.dt.month)
+    day = int(last_date.dt.day)
     if mode == 'datetime':
-        bossa_date = date(year, month, day)
+        bossa_date = dt.date(year, month, day)
     elif mode == 'string':
         if month < 10:
             str_month = '0' + str(month)
@@ -137,7 +150,7 @@ def get_data_from_bossa(stooq_name, path_to_data):
         DESCRIPTION.
 
     '''
-    file_name = path_to_data + stooq_name + '.mst'
+    file_name = path_to_data + os.path.sep + stooq_name + '.mst'
     data = pd.read_csv(file_name,
                        usecols=[1, 2, 3, 4, 5, 6],
                        parse_dates=[0],
@@ -160,6 +173,23 @@ def get_date_only(row):
     date_time = pd.to_datetime(date_time)
     date_only = date_time.date()
     return date_only
+
+def get_data_yahoo(symbol, start, end):
+    '''
+    Returns data from Yahoo Finance. Data is cached for 8 hours.
+    Columns: ['High', 'Low', 'Open', 'Close', 'Volume', 'AdjClose']
+    '''
+    expire_afer = dt.timedelta(hours=8)
+    session = requests_cache.CachedSession(cache_name='cache',
+                                            backend='sqlite',
+                                            expire_afer=expire_afer)
+    session.headers = DEFAULT_HEADERS
+    data = pdr.DataReader(symbol,
+                        'yahoo',
+                        start=start,
+                        end=end,
+                        session=session)
+    return data
 
 if __name__ == '__main__':
     print('This is a module, do not run it, import it!')
