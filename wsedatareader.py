@@ -10,12 +10,18 @@ import os
 import pickle
 import datetime as dt
 from pathlib import Path
-import requests_cache
+#import requests_cache
 import pandas_datareader.data as pdr
 from pandas_datareader.yahoo.headers import DEFAULT_HEADERS
-#from datetime import date
+from datetime import datetime
 import quandl
 import pandas as pd
+# zmiana 6.01.2023
+import yfinance as yf
+
+#yf.pdr_override()
+# koniec zmiana 6.01.2023
+
 
 def create_directory(directory_name, verbose=False):
     '''
@@ -179,17 +185,43 @@ def get_data_yahoo(symbol, start, end):
     Returns data from Yahoo Finance. Data is cached for 8 hours.
     Columns: ['High', 'Low', 'Open', 'Close', 'Volume', 'AdjClose']
     '''
+    ''' zmiana 7.06.2023
     expire_afer = dt.timedelta(hours=8)
     session = requests_cache.CachedSession(cache_name='cache',
                                             backend='sqlite',
                                             expire_afer=expire_afer)
     session.headers = DEFAULT_HEADERS
-    data = pdr.DataReader(symbol,
-                        'yahoo',
-                        start=start,
-                        end=end,
-                        session=session)
+    '''
+    try:
+        ''' zmiana 6.01.2023
+        data = pdr.DataReader(symbol,
+                            'yahoo',
+                            start=start,
+                            end=end,
+                            session=session)
+        '''
+        #data = pdr.get_data_yahoo(symbol, start=start, end=end, progress=False)
+        data = yf.download(symbol, start=start, end=end, progress=False)
+    except Exception as e:
+        print('Whike reading {} data for period: {} - {} got exception: {}'.format(symbol,
+                                                                                start,
+                                                                                end,
+                                                                                str(e)))
+
     return data
+
+def get_yahoo_date():
+    '''
+    Function gets last quote date avaiable on Yahoo Finance by checking the
+    ^SPX index values
+    '''
+    END = dt.date.today()
+    START = END - dt.timedelta(days=14)
+    SYMBOL = '^SPX'
+    DATA=get_data_yahoo(SYMBOL, START, END)
+    DATE = DATA.index[-1].date()
+
+    return DATE
 
 if __name__ == '__main__':
     print('This is a module, do not run it, import it!')
