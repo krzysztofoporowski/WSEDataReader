@@ -1,0 +1,56 @@
+appdirs @ file:///home/conda/feedstock_root/build_artifacts/appdirs_1603108395799/work
+beautifulsoup4 @ file:///home/conda/feedstock_root/build_artifacts/beautifulsoup4_1680888073205/work
+Brotli @ file:///D:/bld/brotli-split_1648883782420/work
+cachetools @ file:///home/conda/feedstock_root/build_artifacts/cachetools_1698197297464/work
+certifi @ file:///C:/b/abs_8a944p1_gn/croot/certifi_1738623753421/work/certifi
+cffi==1.17.1
+charset-normalizer @ file:///home/conda/feedstock_root/build_artifacts/charset-normalizer_1698833585322/work
+contourpy @ file:///D:/bld/contourpy_1699041497260/work
+curl_cffi==0.11.1
+cycler @ file:///home/conda/feedstock_root/build_artifacts/cycler_1696677705766/work
+et-xmlfile==1.1.0
+finvizfinance==1.2.0
+fonttools @ file:///D:/bld/fonttools_1701530768987/work
+frozendict==2.3.10
+html5lib @ file:///home/conda/feedstock_root/build_artifacts/html5lib_1592930327044/work
+idna @ file:///home/conda/feedstock_root/build_artifacts/idna_1701026962277/work
+inflection==0.5.1
+kiwisolver @ file:///D:/bld/kiwisolver_1695380033173/work
+lxml @ file:///C:/b/abs_9e7tpg2vv9/croot/lxml_1695058219431/work
+matplotlib @ file:///D:/bld/matplotlib-suite_1700509536225/work
+more-itertools @ file:///tmp/build/80754af9/more-itertools_1637733554872/work
+multitasking @ file:///home/conda/feedstock_root/build_artifacts/multitasking_1622493113162/work
+munkres==1.1.4
+numpy @ file:///D:/bld/numpy_1653325554875/work
+openpyxl @ file:///C:/b/abs_6cdczthntz/croot/openpyxl_1736371239628/work
+packaging @ file:///home/conda/feedstock_root/build_artifacts/packaging_1696202382185/work
+pandas @ file:///D:/bld/pandas_1699670281108/work
+pandas-datareader @ file:///tmp/build/80754af9/pandas-datareader_1626259591421/work
+peewee @ file:///D:/bld/peewee_1697222876731/work
+Pillow @ file:///C:/b/abs_153xikw91n/croot/pillow_1695134603563/work
+platformdirs==4.3.6
+ply==3.11
+protobuf==6.31.0
+pycparser==2.22
+pyparsing @ file:///home/conda/feedstock_root/build_artifacts/pyparsing_1690737849915/work
+PyQt5==5.15.10
+PyQt5-sip @ file:///C:/b/abs_c0pi2mimq3/croot/pyqt-split_1698769125270/work/pyqt_sip
+PySocks @ file:///D:/bld/pysocks_1661604991356/work
+python-dateutil @ file:///home/conda/feedstock_root/build_artifacts/python-dateutil_1626286286081/work
+pytz @ file:///home/conda/feedstock_root/build_artifacts/pytz_1693930252784/work
+Quandl @ file:///C:/ci_310/quandl_1642112353548/work
+requests @ file:///home/conda/feedstock_root/build_artifacts/requests_1684774241324/work
+requests-cache==0.4.13
+sip @ file:///D:/bld/sip_1697300537181/work
+six @ file:///home/conda/feedstock_root/build_artifacts/six_1620240208055/work
+soupsieve @ file:///home/conda/feedstock_root/build_artifacts/soupsieve_1693929250441/work
+TA-Lib @ file:///D:/bld/ta-lib_1655668087947/work
+tomli @ file:///home/conda/feedstock_root/build_artifacts/tomli_1644342247877/work
+tornado @ file:///D:/bld/tornado_1695373669358/work
+tzdata @ file:///home/conda/feedstock_root/build_artifacts/python-tzdata_1680081134351/work
+unicodedata2 @ file:///D:/bld/unicodedata2_1695848155043/work
+urllib3 @ file:///home/conda/feedstock_root/build_artifacts/urllib3_1699933488691/work
+webencodings @ file:///home/conda/feedstock_root/build_artifacts/webencodings_1694681268211/work
+websockets==15.0.1
+win-inet-pton @ file:///D:/bld/win_inet_pton_1667051142467/work
+yfinance==0.2.61

@@ -8,12 +8,15 @@ krzysztof.oporowski@gmail.com
 
 import os
 import pickle
+import requests
 import datetime as dt
 from pathlib import Path
 #import requests_cache
 import pandas_datareader.data as pdr
 from pandas_datareader.yahoo.headers import DEFAULT_HEADERS
 from datetime import datetime
+from bs4 import BeautifulSoup
+import time
 import quandl
 import pandas as pd
 # zmiana 6.01.2023
@@ -22,6 +25,43 @@ import yfinance as yf
 #yf.pdr_override()
 # koniec zmiana 6.01.2023
 
+
+def finviz_screener_tickers(filters, max_pages=5, pause=1.0):
+    """
+    filters: list of finviz filter codes, np. ['cap_largeover','fa_pe_u25']
+    max_pages: ile stron pobrać (Finviz ~20 wyników na stronę)
+    returns: list of tickers
+    """
+    base = "https://finviz.com/screener.ashx?v=111&f=" + ",".join(filters)
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
+    tickers = []
+
+    for page in range(1, max_pages + 1):
+        if page == 1:
+            url = base
+        else:
+            # Finviz paginacja: r param określa indeks pierwszego rekordu (1,21,41,...)
+            start = (page - 1) * 20 + 1
+            url = base + f"&r={start}"
+        resp = requests.get(url, headers=headers, timeout=15)
+        if resp.status_code != 200:
+            print(f"HTTP {resp.status_code} dla {url}")
+            break
+            print(resp.status_code)
+        soup = BeautifulSoup(resp.text, "html.parser")
+
+        # Finviz: tickery są w linkach z klasą 'screener-link-primary'
+        anchors = soup.find_all("a", class_="screener-link-primary")
+        if not anchors:
+            break
+        page_tickers = [a.text.strip() for a in anchors]
+        # unikaj duplikatów
+        for t in page_tickers:
+            if t not in tickers:
+                tickers.append(t)
+
+        time.sleep(pause)  # nie obciążaj serwera
+    return tickers
 
 def create_directory(directory_name, verbose=False):
     '''

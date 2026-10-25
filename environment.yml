@@ -1,0 +1,17 @@
+name: gielda
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10.9
+  - ta-lib
+  - requests
+  - pandas
+  - yfinance
+  - cachetools
+  - requests_cache
+  - pandas-datareader
+  - quandl
+  - matplotlib
+  - openpyxl
+prefix: C:\ProgramData\anaconda3\envs\gielda
